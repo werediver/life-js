@@ -35,8 +35,8 @@ var LifeGraphics = (function () {
 
 	LifeGraphics.prototype.drawCells = function (core) {
 		this.context.fillStyle = "#80F080";
-		for (var col = 0, maxcol = core.cells.length; col < maxcol; ++col) {
-			for (var row = 0, maxrow =  core.cells[col].length; row < maxrow; ++row) {
+		for (var col = 0; col < core.nx; ++col) {
+			for (var row = 0; row < core.ny; ++row) {
 				cell = core.cells[col][row];
 				if (cell == 1) {
 					// Here is hard-coded 1 px border
