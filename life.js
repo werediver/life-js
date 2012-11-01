@@ -1,4 +1,3 @@
-// TODO: Add state (play/pause)
 // TODO: Add reset feture
 // TODO: Add random population feature
 // TODO: Add manual population feature
@@ -7,16 +6,15 @@ var Life = (function () {
 		var cellSize = 10;	// px
 
 		this.canvas = document.getElementById(canvasId);
-		if (this.canvas == null) {
-			console.log("Error. Can't find element by id '" + canvasId + "'.");
-			return null;
-		}
+		assert(this.canvas != null, "Can't find element by id '" + canvasId + "'.");
 
 		this.graphics = new LifeGraphics(this.canvas, cellSize);
 
 		var nx = this.canvas.width  / cellSize;
 		var ny = this.canvas.height / cellSize;
 		this.core = new LifeCore(nx, ny);
+
+		this.play = false;
 	}
 
 	Life.prototype.loop = function () {
@@ -27,12 +25,19 @@ var Life = (function () {
 	}
 
 	Life.prototype.startLoop = function () {
+		this.play = true;
 		var _this = this;
-		setInterval(function () {_this.loop()}, 1000 / 5);
+		setInterval(function () {
+			if (_this.play)
+				_this.loop()
+			else
+				clearInterval(this);
+		}, 1000 / 5);
 	}
 
 	Life.prototype.stopLoop = function () {
-		clearInterval(this.loop);
+		this.play = false;
+		//clearInterval(this.loop);
 	}
 
 	return Life;
@@ -42,5 +47,17 @@ var life = null;
 
 function init() {
 	life = new Life("lifecanvas", 10);
-	life.startLoop();
+
+	var play = document.getElementById("play");
+	play.addEventListener("click", function () {
+		console.log("click");
+		if (life.play)
+			life.stopLoop();
+		else
+			life.startLoop();
+
+	});
+	var reset = document.getElementById("reset");
+
+	//life.startLoop();
 }
