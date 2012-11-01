@@ -1,15 +1,28 @@
+var AssertException = (function () {
+	function AssertException(message) {
+		this.message = message;
+	}
+
+	AssertException.prototype.toString = function () {
+		return "AssertException: " + this.message;
+	}
+})();
+
+function assert(expression, description) {
+	if (!expression)
+		throw new AssertException(message);
+}
+
 var LifeCore = (function () {
 	function LifeCore(nx, ny) {
-		console.log("Creating grid " + nx + "x" + ny + " cell(s).");
-
-		if (nx <= 0 || ny <= 0) {
-			console.log("Error. Invalid grid size: " + nx + "x" + ny + " cell(s)");
-			return null;
-		}
+		assert(nx >= 0 || ny >= 0, "Invalid grid size (" + nx + "x" + ny + ").");
 		this.nx = nx;
 		this.ny = ny;
+		console.log("Creating grid " + nx + "x" + ny + " cell(s).");
 
 		this.generation = 1;
+		// TODO: Add population counter
+		//this.population = 0;
 
 		this.cells = new Array(this.nx);
 		for (var col = 0, colmax = this.nx; col < colmax; ++col)
@@ -20,7 +33,13 @@ var LifeCore = (function () {
 		for (var col = 0, colmax = this.nx; col < colmax; ++col)
 			this.buffer[col] = new Array(this.ny);
 
-		// Initial fill
+		/*
+		 * Initial fill
+		 *
+		 *    o o o
+		 *    o   o
+		 *    o   o
+		 */
 		var xmid = this.nx / 2;
 		var ymid = this.ny / 2;
 
@@ -109,17 +128,11 @@ var LifeCore = (function () {
 
 var LifeGraphics = (function () {
 	function LifeGraphics(canvas, cellSize) {
-		this.canvas = canvas;
+		this.canvas  = canvas;
 		this.context = canvas.getContext("2d");
-		if (this.context == null) {
-			console.log("Error. Can't get context from the canvas " + canvas + ".");
-			return null;
-		}
 
-		if (cellSize <= 0) {
-			console.log("Error. Invalid cell size: " + cellSize + " px.");
-			return null;
-		}
+		// Cell size should be at least 3 px: 1 px border and 1 px body.
+		assert(cellSize > 2, "Invalid cell size (" + cellSize + " px).");
 		this.cellSize = cellSize;
 
 		this.xoffset = (this.canvas.width  % this.cellSize) / 2;
@@ -175,6 +188,10 @@ var LifeGraphics = (function () {
 	return LifeGraphics;
 })();
 
+// TODO: Add state (play/pause)
+// TODO: Add reset feture
+// TODO: Add random population feature
+// TODO: Add manual population feature
 var Life = (function () {
 	function Life(canvasId) {
 		var cellSize = 10;	// px
