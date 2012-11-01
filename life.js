@@ -1,4 +1,3 @@
-// TODO: Add reset feture
 // TODO: Add random population feature
 // TODO: Add manual population feature
 var Life = (function () {
@@ -50,7 +49,6 @@ function init() {
 
 	var play = document.getElementById("play");
 	play.addEventListener("click", function () {
-		console.log("click");
 		if (life.play)
 			life.stopLoop();
 		else

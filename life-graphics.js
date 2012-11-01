@@ -35,10 +35,11 @@ var LifeGraphics = (function () {
 
 	LifeGraphics.prototype.drawCells = function (core) {
 		this.context.fillStyle = "#80F080";
-		for (var col = 0; col < core.nx; ++col) {
-			for (var row = 0; row < core.ny; ++row) {
-				cell = core.cells[col][row];
-				if (cell == 1) {
+		var grid = core.getCurrentbuffer();
+		for (var col = 0; col < core.width; ++col) {
+			for (var row = 0; row < core.height; ++row) {
+				cell = grid[col][row];
+				if (cell > 0) {
 					// Here is hard-coded 1 px border
 					this.context.fillRect(
 							this.xoffset + this.cellSize * col + 1,
