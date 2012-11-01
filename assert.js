@@ -6,9 +6,11 @@ var AssertException = (function () {
 	AssertException.prototype.toString = function () {
 		return "AssertException: " + this.message;
 	}
+
+	return AssertException;
 })();
 
-function assert(expression, description) {
+function assert(expression, message) {
 	if (!expression)
 		throw new AssertException(message);
 }
