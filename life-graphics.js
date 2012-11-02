@@ -7,8 +7,8 @@ var LifeGraphics = (function () {
 		assert(cellSize > 2, "Invalid cell size (" + cellSize + " px).");
 		this.cellSize = cellSize;
 
-		this.xoffset = (this.canvas.width  % this.cellSize) / 2;
-		this.yoffset = (this.canvas.height % this.cellSize) / 2;
+		this.xoffset = Math.round((this.canvas.width  % this.cellSize) / 2);
+		this.yoffset = Math.round((this.canvas.height % this.cellSize) / 2);
 	}
 
 	LifeGraphics.prototype.drawGrid = function () {

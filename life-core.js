@@ -1,5 +1,3 @@
-// TODO: Add reset feture
-
 // Double buffered grid based on single-dimensional arrays
 var DoubleGrid = (function () {
 	function DoubleGrid(width, height) {
@@ -8,6 +6,13 @@ var DoubleGrid = (function () {
 
 		this.buffer1 = new Array(width * height);
 		this.buffer2 = new Array(width * height);
+	}
+
+	DoubleGrid.prototype.reset = function () {
+		for (key in this.buffer1)
+			delete this.buffer1[key];
+		for (key in this.buffer2)
+			delete this.buffer2[key];
 	}
 
 	DoubleGrid.prototype.swap = function () {
@@ -50,8 +55,25 @@ var LifeCore = (function () {
 		console.log("Life on grid " + width + "x" + height + ".");
 
 		this.dgrid = new DoubleGrid(width, height);
+		this.generation = 1;
+		this.population = 0;
 
 		this.populateDefault();
+	}
+
+	LifeCore.prototype.reset = function () {
+		this.dgrid.reset();
+		this.generation = 1;
+		this.population = 0;
+	}
+
+	// Note: step() updates population count automatically.
+	LifeCore.prototype.updatePopulationCount = function () {
+		var count = 0, buffer = this.dgrid.buffer1;
+		for (key in buffer)
+			if (this.isAlive(buffer[key]))
+				++count;
+		this.population = count;
 	}
 
 	LifeCore.prototype.populateDefault = function () {
@@ -61,25 +83,38 @@ var LifeCore = (function () {
 		 *     o   o
 		 *     o   o
 		 */
+
 		var dgrid = this.dgrid;
-		var xmid = dgrid.width  / 2;
-		var ymid = dgrid.height / 2;
+		var xmid = Math.round(dgrid.width  / 2);
+		var ymid = Math.round(dgrid.height / 2);
 
-		dgrid.set(xmid - 1, ymid - 1, 1);
-		dgrid.set(xmid    , ymid - 1, 1);
-		dgrid.set(xmid + 1, ymid - 1, 1);
+		// Assuming the grid is big enough
 
-		dgrid.set(xmid - 1, ymid,     1);
-		dgrid.set(xmid + 1, ymid,     1);
+		dgrid.set(xmid - 1, ymid - 1, this.newCell());
+		dgrid.set(xmid    , ymid - 1, this.newCell());
+		dgrid.set(xmid + 1, ymid - 1, this.newCell());
 
-		dgrid.set(xmid - 1, ymid + 1, 1);
-		dgrid.set(xmid + 1, ymid + 1, 1);
+		dgrid.set(xmid - 1, ymid,     this.newCell());
+		dgrid.set(xmid + 1, ymid,     this.newCell());
+
+		dgrid.set(xmid - 1, ymid + 1, this.newCell());
+		dgrid.set(xmid + 1, ymid + 1, this.newCell());
 
 		dgrid.swap();
+
+		this.updatePopulationCount();
 	}
 
-	LifeCore.prototype.populateRandom = function () {
-		// TODO: Implement.
+	LifeCore.prototype.populateRandom = function (fillFactor) {
+		var dgrid = this.dgrid;
+		var w = dgrid.width, h = dgrid.height;
+		for (var n = w * h * fillFactor; n > 0; --n) {
+			var x = Math.round((w - 1) * Math.random());
+			var y = Math.round((h - 1) * Math.random());
+			dgrid.set(x, y, this.newCell());
+		}
+		dgrid.swap();
+		this.updatePopulationCount();
 	}
 
 	LifeCore.prototype.newCell = function () {
@@ -121,12 +156,15 @@ var LifeCore = (function () {
 		var dgrid = this.dgrid;
 		var w = dgrid.width;
 		var h = dgrid.height;
+		var count = 0;	// new population count
 		for (var x = 0; x < w; ++x) {
 			for (var y = 0; y < h; ++y) {
 				var n = this.countNeighbours(x, y);
 				var cell = dgrid.get(x, y);
 				if (this.isAlive(cell)) {
+					++count;
 					if (n == 2 || n == 3)
+						// Move "++cell" to a method
 						dgrid.set(x, y, ++cell);
 					else
 						dgrid.set(x, y, 0);
@@ -140,6 +178,8 @@ var LifeCore = (function () {
 			}
 		}
 		this.dgrid.swap();
+		this.population = count;
+		++this.generation;
 	}
 
 	return LifeCore;

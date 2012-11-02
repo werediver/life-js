@@ -1,13 +1,13 @@
-#play, #reset {
+body {
+	font-family: courier;
+}
+
+#play, #randomize, #reset {
 	cursor: pointer;
 	padding: 0.25em 0.5em;
 	background-color: lightgray;
 }
 
-#play:hover, #reset:hover {
+#play:hover, #randomize:hover, #reset:hover {
 	background-color: #80F080;
-}
-
-#lifecanvas {
-	/* border: 1px solid black; */
 }
