@@ -10,8 +10,8 @@ var Grid = (function () {
 		this.buffer = buffer;
 	}
 
-	// Map offset to open interval [0..max)
-	Grid.prototype.offset = function (offset, max) {
+	// Translates offset to open interval [0..max)
+	Grid.prototype.translateOffset = function (offset, max) {
 		var correctOffset = offset % max;
 		if (correctOffset < 0)
 			correctOffset = max + correctOffset;
@@ -20,15 +20,17 @@ var Grid = (function () {
 
 	// Access via columns may be faster
 	Grid.prototype.getColumn = function (x) {
-		return this.buffer[this.offset(x, this.width)];
+		return this.buffer[this.translateOffset(x, this.width)];
 	}
 
+	// Should be pretty slow
 	Grid.prototype.getCell = function (x, y) {
-		return this.buffer[this.offset(x, this.width)][this.offset(y, this.height)];
+		return this.buffer[this.translateOffset(x, this.width)][this.translateOffset(y, this.height)];
 	}
 
+	// Should be pretty slow
 	Grid.prototype.setCell = function (x, y, cell) {
-		this.buffer[this.offset(x, this.width)][this.offset(y, this.height)] = cell;
+		this.buffer[this.translateOffset(x, this.width)][this.translateOffset(y, this.height)] = cell;
 	}
 
 	return Grid;
@@ -94,7 +96,7 @@ var LifeCore = (function () {
 
 	LifeCore.prototype.countNeighbours = function (x, y) {
 		var count = 0, grid = this.grid1;
-		var _y = grid.offset(y - 1, grid.height), y_ = grid.offset(y + 1, grid.height);
+		var _y = grid.translateOffset(y - 1, grid.height), y_ = grid.translateOffset(y + 1, grid.height);
 
 		var col = grid.getColumn(x - 1);
 

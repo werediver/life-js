@@ -1,11 +1,11 @@
 #play, #reset {
 	cursor: pointer;
 	padding: 0.25em 0.5em;
-	background-color: #F8F8F0;
+	background-color: lightgray;
 }
 
 #play:hover, #reset:hover {
-	background-color: #F0FFF0;
+	background-color: #80F080;
 }
 
 #lifecanvas {

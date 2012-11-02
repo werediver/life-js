@@ -1,3 +1,4 @@
+// TODO: Add FPS counter
 // TODO: Add random population feature
 // TODO: Add manual population feature
 var Life = (function () {

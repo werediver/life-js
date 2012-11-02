@@ -15,22 +15,27 @@ var LifeGraphics = (function () {
 		var w = this.canvas.width;
 		var h = this.canvas.height;
 
-		this.context.strokeStyle = "#F0F0F0";
-		this.context.beginPath();
+		var context = this.context;
+
+		context.fillStyle = "#FFFFFF";
+		context.fillRect(0, 0, w, h);
+
+		context.strokeStyle = "#F0F0F0";
+		context.beginPath();
 
 		// Draw vertical lines
 		for (var x = this.xoffset; x <= w; x += this.cellSize) {
-			this.context.moveTo(x, 0);
-			this.context.lineTo(x, h);
+			context.moveTo(x, 0);
+			context.lineTo(x, h);
 		}
 
 		// Draw horizontal lines
 		for (var y = this.yoffset; y <= h; y += this.cellSize) {
-			this.context.moveTo(0, y);
-			this.context.lineTo(w, y);
+			context.moveTo(0, y);
+			context.lineTo(w, y);
 		}
 
-		this.context.stroke();
+		context.stroke();
 	}
 
 	LifeGraphics.prototype.drawCells = function (core) {
@@ -53,7 +58,7 @@ var LifeGraphics = (function () {
 	}
 
 	LifeGraphics.prototype.draw = function (core) {
-		this.context.clearRect(0, 0, this.canvas.width, this.canvas.height);
+		//this.context.clearRect(0, 0, this.canvas.width, this.canvas.height);
 		this.drawGrid();
 		this.drawCells(core);
 	}
