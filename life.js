@@ -3,13 +3,13 @@
 // TODO: Add speed control
 var Life = (function () {
 	function Life(canvasId, cellSize) {
-		this.canvas = document.getElementById(canvasId);
-		assert(this.canvas != null, "Can't find element by id '" + canvasId + "'.");
+		var canvas = document.getElementById(canvasId);
+		assert(canvas != null);
 
-		this.graphics = new LifeGraphics(this.canvas, cellSize);
+		this.graphics = new LifeGraphics(canvas, cellSize);
 
-		var nx = Math.floor(this.canvas.width  / cellSize);
-		var ny = Math.floor(this.canvas.height / cellSize);
+		var nx = Math.floor(canvas.width  / cellSize);
+		var ny = Math.floor(canvas.height / cellSize);
 		this.core = new LifeCore(nx, ny);
 
 		this.status = this.STATUS.PAUSED;
@@ -24,26 +24,39 @@ var Life = (function () {
 		this.graphics.draw(this.core);
 	}
 
-	Life.prototype.loop = function () {
+	Life.prototype.step = function () {
 		//console.log("Generation: " + this.core.generation);
 		//console.log("Population: " + this.core.population);
-		this.refresh();
+		this.graphics.draw(this.core);
 		this.core.step();
 	}
 
-	Life.prototype.startLoop = function () {
+	Life.prototype.play = function () {
 		var _this = this;
 		this.status = this.STATUS.PLAYING;
 		this.loopTimerId = setInterval(function () {
 			if (_this.status == _this.STATUS.PLAYING)
-				_this.loop()
+				_this.step()
 			else
 				clearInterval(_this.loopTimerId);
 		}, 1000 / 5);
 	}
 
-	Life.prototype.stopLoop = function () {
+	Life.prototype.pause = function () {
 		this.status = this.STATUS.PAUSED;
+	}
+
+	Life.prototype.randomize = function () {
+		life.core.reset();
+		life.core.populateRandom(0.2);
+		life.refresh();
+	}
+
+	Life.prototype.reset = function () {
+		life.pause();
+		life.core.reset();
+		life.core.populateDefault();
+		life.refresh();
 	}
 
 	return Life;
@@ -57,27 +70,22 @@ function init() {
 
 	var play = document.getElementById("play");
 	play.addEventListener("click", function () {
-		if (life.status == life.STATUS.PLAYING) {
-			play.innerHTML = "Play";
-			life.stopLoop();
-		} else {
+		if (life.status == life.STATUS.PAUSED) {
 			play.innerHTML = "Pause";
-			life.startLoop();
+			life.play();
+		} else {
+			play.innerHTML = "Play";
+			life.pause();
 		}
 	});
 
 	var randomize = document.getElementById("randomize");
 	randomize.addEventListener("click", function () {
-		life.core.reset();
-		life.core.populateRandom(0.2);
-		life.refresh();
+		life.randomize();
 	});
 
 	var reset = document.getElementById("reset");
 	reset.addEventListener("click", function () {
-		life.stopLoop();
-		life.core.reset();
-		life.core.populateDefault();
-		life.refresh();
+		life.reset();
 	});
 }
