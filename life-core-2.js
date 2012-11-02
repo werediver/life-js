@@ -1,153 +1,145 @@
 // TODO: Add reset feture
-var Grid = (function () {
-	function Grid(width, height) {
+
+// Double buffered grid based on single-dimensional arrays
+var DoubleGrid = (function () {
+	function DoubleGrid(width, height) {
 		this.width  = width;
 		this.height = height;
 
-		var buffer = new Array(width);
-		for (var col = 0; col < width; ++col)
-			buffer[col] = new Array(height);
-		this.buffer = buffer;
+		this.buffer1 = new Array(width * height);
+		this.buffer2 = new Array(width * height);
 	}
 
-	// Translates offset to open interval [0..max)
-	Grid.prototype.translateOffset = function (offset, max) {
-		var correctOffset = offset % max;
-		if (correctOffset < 0)
-			correctOffset = max + correctOffset;
-		return correctOffset;
+	DoubleGrid.prototype.swap = function () {
+		var tmp = this.buffer1;
+		this.buffer1 = this.buffer2;
+		this.buffer2 = tmp;
 	}
 
-	// Access via columns may be faster
-	Grid.prototype.getColumn = function (x) {
-		return this.buffer[this.translateOffset(x, this.width)];
+	DoubleGrid.prototype.get = function (x, y) {
+		return this.buffer1[this.width * x + y];
 	}
 
-	// Should be pretty slow
-	Grid.prototype.getCell = function (x, y) {
-		return this.buffer[this.translateOffset(x, this.width)][this.translateOffset(y, this.height)];
+	DoubleGrid.prototype.set = function (x, y, val) {
+		this.buffer2[this.width * x + y] = val;
 	}
 
-	// Should be pretty slow
-	Grid.prototype.setCell = function (x, y, cell) {
-		this.buffer[this.translateOffset(x, this.width)][this.translateOffset(y, this.height)] = cell;
+	// Special cases of coordinate translation
+
+	DoubleGrid.prototype.decx = function (x) {
+		return --x >= 0 ? x : this.width - 1;
 	}
 
-	return Grid;
+	DoubleGrid.prototype.incx = function (x) {
+		return ++x < this.width ? x : 0;
+	}
+
+	DoubleGrid.prototype.decy = function (y) {
+		return --y >= 0 ? y : this.height - 1;
+	}
+
+	DoubleGrid.prototype.incy = function (y) {
+		return ++y < this.height ? y : 0;
+	}
+
+	return DoubleGrid;
 })();
 
 var LifeCore = (function () {
 	function LifeCore(width, height) {
 		console.log("Life on grid " + width + "x" + height + ".");
 
-		this.width  = width;
-		this.height = height;
-
-		// Grid for the current generation
-		this.grid1 = new Grid(width, height);
-		// Grid for the next generation
-		this.grid2 = new Grid(width, height);
+		this.dgrid = new DoubleGrid(width, height);
 
 		this.populateDefault();
 	}
 
 	LifeCore.prototype.populateDefault = function () {
 		/*
-		 *   o o o
-		 *   o   o
-		 *   o   o
+		 * Put this figure in the center of the grid:
+		 *     o o o
+		 *     o   o
+		 *     o   o
 		 */
-		var xmid = this.width  / 2;
-		var ymid = this.height / 2;
-		var buffer = this.getCurrentbuffer();
+		var dgrid = this.dgrid;
+		var xmid = dgrid.width  / 2;
+		var ymid = dgrid.height / 2;
 
-		buffer[xmid - 1][ymid - 1] = 1;
-		buffer[xmid    ][ymid - 1] = 1;
-		buffer[xmid + 1][ymid - 1] = 1;
+		dgrid.set(xmid - 1, ymid - 1, 1);
+		dgrid.set(xmid    , ymid - 1, 1);
+		dgrid.set(xmid + 1, ymid - 1, 1);
 
-		buffer[xmid - 1][ymid    ] = 1;
-		buffer[xmid + 1][ymid    ] = 1;
+		dgrid.set(xmid - 1, ymid,     1);
+		dgrid.set(xmid + 1, ymid,     1);
 
-		buffer[xmid - 1][ymid + 1] = 1;
-		buffer[xmid + 1][ymid + 1] = 1;
+		dgrid.set(xmid - 1, ymid + 1, 1);
+		dgrid.set(xmid + 1, ymid + 1, 1);
+
+		dgrid.swap();
 	}
 
 	LifeCore.prototype.populateRandom = function () {
 		// TODO: Implement.
 	}
 
-	LifeCore.prototype.swap = function () {
-		var tmp = this.grid1;
-		this.grid1 = this.grid2;
-		this.grid2 = tmp;
-	}
-
-	LifeCore.prototype.getCurrentbuffer = function () {
-		return this.grid1.buffer;
+	LifeCore.prototype.newCell = function () {
+		return 1;
 	}
 
 	LifeCore.prototype.isAlive = function (cell) {
 		return cell > 0;
 	}
 
-	LifeCore.prototype.newCell = function () {
-		return 1;
-	}
-
 	LifeCore.prototype.countNeighbours = function (x, y) {
-		var count = 0, grid = this.grid1;
-		var _y = grid.translateOffset(y - 1, grid.height), y_ = grid.translateOffset(y + 1, grid.height);
+		var count = 0, dgrid = this.dgrid;
+		var _x = dgrid.decx(x), x_ = dgrid.incx(x);
+		var _y = dgrid.decy(y), y_ = dgrid.incy(y);
 
-		var col = grid.getColumn(x - 1);
-
-		if (this.isAlive(col[_y]))
+		if (this.isAlive(dgrid.get(_x, _y)))
 			++count;
-		if (this.isAlive(col[y]))
+		if (this.isAlive(dgrid.get(_x, y)))
 			++count;
-		if (this.isAlive(col[y_]))
-			++count;
-
-		col = grid.getColumn(x);
-		if (this.isAlive(col[_y]))
-			++count;
-		if (this.isAlive(col[y_]))
+		if (this.isAlive(dgrid.get(_x, y_)))
 			++count;
 
-		col = grid.getColumn(x + 1);
-		if (this.isAlive(col[_y]))
+		if (this.isAlive(dgrid.get(x, _y)))
 			++count;
-		if (this.isAlive(col[y]))
+		if (this.isAlive(dgrid.get(x, y_)))
 			++count;
-		if (this.isAlive(col[y_]))
+
+		if (this.isAlive(dgrid.get(x_, _y)))
+			++count;
+		if (this.isAlive(dgrid.get(x_, y)))
+			++count;
+		if (this.isAlive(dgrid.get(x_, y_)))
 			++count;
 
 		return count;
 	}
 
 	LifeCore.prototype.step = function () {
-		var grid1 = this.grid1, grid2 = this.grid2;
-		var w = grid1.width, h = grid1.height;
+		var dgrid = this.dgrid;
+		var w = dgrid.width;
+		var h = dgrid.height;
 		for (var x = 0; x < w; ++x) {
-			var col1 = grid1.getColumn(x);
-			var col2 = grid2.getColumn(x);
 			for (var y = 0; y < h; ++y) {
 				var n = this.countNeighbours(x, y);
-				var cell = col1[y];
+				var cell = dgrid.get(x, y);
 				if (this.isAlive(cell)) {
 					if (n == 2 || n == 3)
-						col2[y] = ++cell;
+						dgrid.set(x, y, ++cell);
 					else
-						col2[y] = 0;
+						dgrid.set(x, y, 0);
 				} else {
 					if (n == 3)
-						col2[y] = this.newCell();
+						dgrid.set(x, y, this.newCell());
 					else
 						// Ensure there is be no garbage from previous steps
-						col2[y] = 0;
+						dgrid.set(x, y, 0);
 				}
 			}
 		}
-		this.swap();
+		this.dgrid.swap();
 	}
 
 	return LifeCore;

@@ -40,11 +40,10 @@ var LifeGraphics = (function () {
 
 	LifeGraphics.prototype.drawCells = function (core) {
 		this.context.fillStyle = "#80F080";
-		var grid = core.getCurrentbuffer();
-		for (var col = 0; col < core.width; ++col) {
-			for (var row = 0; row < core.height; ++row) {
-				cell = grid[col][row];
-				if (cell > 0) {
+		var dgrid = core.dgrid;
+		for (var col = 0; col < dgrid.width; ++col) {
+			for (var row = 0; row < dgrid.height; ++row) {
+				if (dgrid.get(col, row) > 0) {
 					// Here is hard-coded 1 px border
 					this.context.fillRect(
 							this.xoffset + this.cellSize * col + 1,
