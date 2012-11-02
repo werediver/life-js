@@ -13,6 +13,9 @@ var Life = (function () {
 		this.core = new LifeCore(nx, ny);
 
 		this.status = this.STATUS.PAUSED;
+
+		this.updateInfoCallback = function () {};
+		this.updateFpsCallback  = function () {};
 	}
 
 	Life.prototype.STATUS = {
@@ -29,6 +32,7 @@ var Life = (function () {
 		//console.log("Population: " + this.core.population);
 		this.graphics.draw(this.core);
 		this.core.step();
+		this.updateInfoCallback();
 	}
 
 	Life.prototype.play = function () {
@@ -47,9 +51,11 @@ var Life = (function () {
 	}
 
 	Life.prototype.randomize = function () {
+		life.pause();
 		life.core.reset();
 		life.core.populateRandom(0.2);
 		life.refresh();
+		this.updateInfoCallback();
 	}
 
 	Life.prototype.reset = function () {
@@ -57,6 +63,7 @@ var Life = (function () {
 		life.core.reset();
 		life.core.populateDefault();
 		life.refresh();
+		this.updateInfoCallback();
 	}
 
 	return Life;
@@ -68,24 +75,40 @@ function init() {
 	life = new Life("lifecanvas", 10);
 	life.refresh();
 
-	var play = document.getElementById("play");
-	play.addEventListener("click", function () {
+	var ui = {
+		// Buttons
+		play:      document.getElementById("play"),
+		randomize: document.getElementById("randomize"),
+		reset:     document.getElementById("reset"),
+
+		// Labels
+		generation: document.getElementById("generation"),
+		population: document.getElementById("population"),
+		fps:        document.getElementById("fps"),
+	}
+
+	ui.play.addEventListener("click", function () {
 		if (life.status == life.STATUS.PAUSED) {
-			play.innerHTML = "Pause";
+			ui.play.innerHTML = "Pause";
 			life.play();
 		} else {
-			play.innerHTML = "Play";
+			ui.play.innerHTML = "Play";
 			life.pause();
 		}
 	});
 
-	var randomize = document.getElementById("randomize");
-	randomize.addEventListener("click", function () {
+	ui.randomize.addEventListener("click", function () {
 		life.randomize();
+		ui.play.innerHTML = "Play";
 	});
 
-	var reset = document.getElementById("reset");
-	reset.addEventListener("click", function () {
+	ui.reset.addEventListener("click", function () {
 		life.reset();
+		ui.play.innerHTML = "Play";
 	});
+
+	life.updateInfoCallback = function () {
+		ui.generation.innerHTML = life.core.generation;
+		ui.population.innerHTML = life.core.population;
+	}
 }
