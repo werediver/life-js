@@ -2,6 +2,11 @@ body {
 	font-family: courier;
 }
 
+#play {
+	display: inline-block;
+	width: 3em;
+}
+
 #play, #randomize, #reset {
 	cursor: pointer;
 	padding: 0.25em 0.5em;
@@ -10,4 +15,9 @@ body {
 
 #play:hover, #randomize:hover, #reset:hover {
 	background-color: #80F080;
+}
+
+#generation, #population, #fps {
+	display: inline-block;
+	width: 3em;
 }
