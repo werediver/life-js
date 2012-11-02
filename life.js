@@ -12,7 +12,12 @@ var Life = (function () {
 		var ny = Math.floor(this.canvas.height / cellSize);
 		this.core = new LifeCore(nx, ny);
 
-		this.play = false;
+		this.status = this.STATUS.PAUSED;
+	}
+
+	Life.prototype.STATUS = {
+		PLAYING: "PLAYING",
+		PAUSED:  "PAUSED"
 	}
 
 	Life.prototype.refresh = function () {
@@ -28,9 +33,9 @@ var Life = (function () {
 
 	Life.prototype.startLoop = function () {
 		var _this = this;
-		this.play = true;
+		this.status = this.STATUS.PLAYING;
 		this.loopTimerId = setInterval(function () {
-			if (_this.play)
+			if (_this.status == _this.STATUS.PLAYING)
 				_this.loop()
 			else
 				clearInterval(_this.loopTimerId);
@@ -38,8 +43,7 @@ var Life = (function () {
 	}
 
 	Life.prototype.stopLoop = function () {
-		this.play = false;
-		//clearInterval(this.loop);
+		this.status = this.STATUS.PAUSED;
 	}
 
 	return Life;
@@ -53,11 +57,13 @@ function init() {
 
 	var play = document.getElementById("play");
 	play.addEventListener("click", function () {
-		if (life.play)
+		if (life.status == life.STATUS.PLAYING) {
+			play.innerHTML = "Play";
 			life.stopLoop();
-		else
+		} else {
+			play.innerHTML = "Pause";
 			life.startLoop();
-
+		}
 	});
 
 	var randomize = document.getElementById("randomize");
@@ -74,6 +80,4 @@ function init() {
 		life.core.populateDefault();
 		life.refresh();
 	});
-
-	//life.startLoop();
 }
