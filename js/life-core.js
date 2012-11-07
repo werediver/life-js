@@ -22,11 +22,11 @@ var DoubleGrid = (function () {
 	}
 
 	DoubleGrid.prototype.get = function (x, y) {
-		return this.buffer1[this.width * x + y];
+		return this.buffer1[this.height * x + y];
 	}
 
 	DoubleGrid.prototype.set = function (x, y, val) {
-		this.buffer2[this.width * x + y] = val;
+		this.buffer2[this.height * x + y] = val;
 	}
 
 	// Special cases of coordinate translation
