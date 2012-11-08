@@ -1,6 +1,3 @@
-// TODO: Add FPS counter
-// TODO: Add manual population feature
-// TODO: Add speed control
 var Life = (function () {
 	function Life(canvasId, cellSize) {
 		var canvas = document.getElementById(canvasId);

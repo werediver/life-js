@@ -1,4 +1,5 @@
-// Double buffered grid based on single-dimensional arrays
+// Double buffered grid based on single-dimensional arrays.
+// Rows are stored consequently.
 var DoubleGrid = (function () {
 	function DoubleGrid(width, height) {
 		this.width  = width;
@@ -22,11 +23,11 @@ var DoubleGrid = (function () {
 	}
 
 	DoubleGrid.prototype.get = function (x, y) {
-		return this.buffer1[this.height * x + y];
+		return this.buffer1[y * this.width + x];
 	}
 
 	DoubleGrid.prototype.set = function (x, y, val) {
-		this.buffer2[this.height * x + y] = val;
+		this.buffer2[y * this.width + x] = val;
 	}
 
 	// Special cases of coordinate translation
