@@ -9,10 +9,11 @@ var Life = (function () {
 		var ny = Math.floor(canvas.height / cellSize);
 		this.core = new LifeCore(nx, ny);
 
+		this.freqMeter = new FreqMeter(10);
+
 		this.status = this.STATUS.PAUSED;
 
 		this.updateInfoCallback = function () {};
-		this.updateFpsCallback  = function () {};
 	}
 
 	Life.prototype.STATUS = {
@@ -29,6 +30,7 @@ var Life = (function () {
 		//console.log("Population: " + this.core.population);
 		this.graphics.draw(this.core);
 		this.core.step();
+		this.freqMeter.tick();
 		this.updateInfoCallback();
 	}
 
@@ -45,6 +47,7 @@ var Life = (function () {
 
 	Life.prototype.pause = function () {
 		this.status = this.STATUS.PAUSED;
+		this.freqMeter.reset();
 	}
 
 	Life.prototype.randomize = function () {
@@ -107,5 +110,6 @@ function init() {
 	life.updateInfoCallback = function () {
 		ui.generation.innerHTML = life.core.generation;
 		ui.population.innerHTML = life.core.population;
+		ui.fps.innerHTML        = life.freqMeter.freq.toFixed(1);
 	}
 }
