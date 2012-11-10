@@ -10,13 +10,12 @@
 		<script src="js/life.js" async="async" defer="defer"></script>
 	</head>
 	<body onload="init()">
-		<div align="center">
-			<p>Conway's Game of Life</p>
-			<p><span id="play">Play</span> <span id="randomize">Randomize</span> <span id="reset">Reset</span></p>
-			<p><small>Generation: <span id="generation">1</span> Population: <span id="population">0</span> FPS: <span id="fps">0.0</span></small></p>
-			<canvas id="lifecanvas" width="640px" height="480px">
-				&lt;canvas&gt; element is not supported.
-			</canvas>
-		</div>
+		<p>Conway's Game of Life</p>
+		<p><span id="life-play">Play</span> <span id="life-randomize">Randomize</span> <span id="life-reset">Reset</span></p>
+		<p><small><input id="life-maxperf" type="checkbox" />Max. performance</small></p>
+		<p><small>Generation: <span id="life-generation">1</span> Population: <span id="life-population">0</span> FPS: <span id="life-fps">0.0</span></small></p>
+		<canvas id="life-canvas" width="640px" height="480px">
+			&lt;canvas&gt; element is not supported.
+		</canvas>
 	</body>
 </html>

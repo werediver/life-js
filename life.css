@@ -1,23 +1,24 @@
 body {
 	font-family: courier;
+	text-align: center;
 }
 
-#play {
+#life-play {
 	display: inline-block;
 	width: 3em;
 }
 
-#play, #randomize, #reset {
+#life-play, #life-randomize, #life-reset {
 	cursor: pointer;
 	padding: 0.25em 0.5em;
 	background-color: lightgray;
 }
 
-#play:hover, #randomize:hover, #reset:hover {
+#life-play:hover, #life-randomize:hover, #life-reset:hover {
 	background-color: #80F080;
 }
 
-#generation, #population, #fps {
+#life-generation, #life-population, #life-fps {
 	display: inline-block;
 	width: 3em;
 }

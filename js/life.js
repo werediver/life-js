@@ -34,7 +34,7 @@ var Life = (function () {
 		this.updateInfoCallback();
 	}
 
-	Life.prototype.play = function () {
+	Life.prototype.play = function (maxperf) {
 		var _this = this;
 		this.status = this.STATUS.PLAYING;
 		this.loopTimerId = setInterval(function () {
@@ -42,10 +42,11 @@ var Life = (function () {
 				_this.step()
 			else
 				clearInterval(_this.loopTimerId);
-		}, 1000 / 5);
+		}, maxperf ? 1 : 1000 / 5);
 	}
 
 	Life.prototype.pause = function () {
+		clearInterval(this.loopTimerId);
 		this.status = this.STATUS.PAUSED;
 		this.freqMeter.reset();
 	}
@@ -72,25 +73,28 @@ var Life = (function () {
 var life = null;
 
 function init() {
-	life = new Life("lifecanvas", 10);
+	life = new Life("life-canvas", 10);
 	life.refresh();
 
 	var ui = {
 		// Buttons
-		play:      document.getElementById("play"),
-		randomize: document.getElementById("randomize"),
-		reset:     document.getElementById("reset"),
+		play:      document.getElementById("life-play"),
+		randomize: document.getElementById("life-randomize"),
+		reset:     document.getElementById("life-reset"),
+
+		// Checkbox
+		maxperf: document.getElementById("life-maxperf"),
 
 		// Labels
-		generation: document.getElementById("generation"),
-		population: document.getElementById("population"),
-		fps:        document.getElementById("fps"),
+		generation: document.getElementById("life-generation"),
+		population: document.getElementById("life-population"),
+		fps:        document.getElementById("life-fps"),
 	}
 
 	ui.play.addEventListener("click", function () {
 		if (life.status == life.STATUS.PAUSED) {
 			ui.play.innerHTML = "Pause";
-			life.play();
+			life.play(ui.maxperf.checked);
 		} else {
 			ui.play.innerHTML = "Play";
 			life.pause();
@@ -106,6 +110,13 @@ function init() {
 		life.reset();
 		ui.play.innerHTML = "Play";
 	});
+
+	ui.maxperf.addEventListener("click", function () {
+		if (life.status == life.STATUS.PLAYING) {
+			life.pause();
+			life.play(ui.maxperf.checked);
+		}
+	})
 
 	life.updateInfoCallback = function () {
 		ui.generation.innerHTML = life.core.generation;
