@@ -36,9 +36,15 @@ var Life = (function () {
 		this.updateInfoCallback();
 	}
 
-	Life.prototype.play = function (maxperf) {
+	Life.prototype.play = function (maxperf, offscreen) {
 		var _this = this;
 		this.status = this.STATUS.PLAYING;
+		if (offscreen == true) {
+			this.offscreen = true;
+			// Off-screen mode impies max. performance.
+			maxperf = true;
+		} else
+			this.offscreen = false;
 		this.loopTimerId = setInterval(function () {
 			if (_this.status == _this.STATUS.PLAYING)
 				_this.step()
@@ -96,10 +102,19 @@ function init() {
 		fps:        document.getElementById("life-fps"),
 	}
 
+	var play = function () {
+		life.play(ui.maxperf.checked, ui.offscreen.checked);
+	}
+
+	var restart = function () {
+		life.pause();
+		play();
+	}
+
 	ui.play.addEventListener("click", function () {
 		if (life.status == life.STATUS.PAUSED) {
 			ui.play.innerHTML = "Pause";
-			life.play(ui.maxperf.checked);
+			play();
 		} else {
 			ui.play.innerHTML = "Play";
 			life.pause();
@@ -117,14 +132,24 @@ function init() {
 	});
 
 	ui.maxperf.addEventListener("click", function () {
-		if (life.status == life.STATUS.PLAYING) {
-			life.pause();
-			life.play(this.checked);
-		}
+		if (life.status == life.STATUS.PLAYING)
+			restart();
 	});
 
 	ui.offscreen.addEventListener("click", function () {
-		life.offscreen = this.checked;
+		if (this.checked) {
+			ui.maxperf.lastState = ui.maxperf.checked;
+			ui.maxperf.checked   = true;
+			ui.maxperf.disabled  = true;
+		} else {
+			if (ui.maxperf.lastState != undefined) {
+				ui.maxperf.checked = ui.maxperf.lastState;
+				delete ui.maxperf.lastState;
+			}
+			ui.maxperf.disabled = false;
+		}
+		if (life.status == life.STATUS.PLAYING)
+			restart();
 	});
 
 	life.updateInfoCallback = function () {
