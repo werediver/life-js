@@ -12,6 +12,7 @@ var Life = (function () {
 		this.freqMeter = new FreqMeter(10);
 
 		this.status = this.STATUS.PAUSED;
+		this.offscreen = false;
 
 		this.updateInfoCallback = function () {};
 	}
@@ -28,7 +29,8 @@ var Life = (function () {
 	Life.prototype.step = function () {
 		//console.log("Generation: " + this.core.generation);
 		//console.log("Population: " + this.core.population);
-		this.graphics.draw(this.core);
+		if (this.offscreen == false)
+			this.graphics.draw(this.core);
 		this.core.step();
 		this.freqMeter.tick();
 		this.updateInfoCallback();
@@ -54,7 +56,9 @@ var Life = (function () {
 	Life.prototype.randomize = function () {
 		life.pause();
 		life.core.reset();
-		life.core.populateRandom(0.2);
+		// The initial density of 37.5% should give the maximal average life
+		// http://www.njohnston.ca/2009/07/longevity-in-conways-game-of-life-revisited/
+		life.core.populateRandom(0.375);
 		life.refresh();
 		this.updateInfoCallback();
 	}
@@ -83,7 +87,8 @@ function init() {
 		reset:     document.getElementById("life-reset"),
 
 		// Checkbox
-		maxperf: document.getElementById("life-maxperf"),
+		maxperf:   document.getElementById("life-maxperf"),
+		offscreen: document.getElementById("life-offscreen"),
 
 		// Labels
 		generation: document.getElementById("life-generation"),
@@ -114,9 +119,13 @@ function init() {
 	ui.maxperf.addEventListener("click", function () {
 		if (life.status == life.STATUS.PLAYING) {
 			life.pause();
-			life.play(ui.maxperf.checked);
+			life.play(this.checked);
 		}
-	})
+	});
+
+	ui.offscreen.addEventListener("click", function () {
+		life.offscreen = this.checked;
+	});
 
 	life.updateInfoCallback = function () {
 		ui.generation.innerHTML = life.core.generation;
