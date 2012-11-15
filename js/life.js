@@ -1,7 +1,7 @@
 var Life = (function () {
 	function Life(canvasId, cellSize) {
 		var canvas = document.getElementById(canvasId);
-		assert(canvas != null);
+		assert(canvas !== null);
 
 		this.graphics = new LifeGraphics(canvas, cellSize);
 
@@ -20,26 +20,26 @@ var Life = (function () {
 	Life.prototype.STATUS = {
 		PLAYING: "PLAYING",
 		PAUSED:  "PAUSED"
-	}
+	};
 
 	Life.prototype.refresh = function () {
 		this.graphics.draw(this.core);
-	}
+	};
 
 	Life.prototype.step = function () {
 		//console.log("Generation: " + this.core.generation);
 		//console.log("Population: " + this.core.population);
-		if (this.offscreen == false)
+		if (this.offscreen === false)
 			this.graphics.draw(this.core);
 		this.core.step();
 		this.freqMeter.tick();
 		this.updateInfoCallback();
-	}
+	};
 
 	Life.prototype.play = function (maxperf, offscreen) {
 		var _this = this;
 		this.status = this.STATUS.PLAYING;
-		if (offscreen == true) {
+		if (offscreen === true) {
 			this.offscreen = true;
 			// Off-screen mode impies max. performance.
 			maxperf = true;
@@ -47,17 +47,17 @@ var Life = (function () {
 			this.offscreen = false;
 		this.loopTimerId = setInterval(function () {
 			if (_this.status == _this.STATUS.PLAYING)
-				_this.step()
+				_this.step();
 			else
 				clearInterval(_this.loopTimerId);
 		}, maxperf ? 1 : 1000 / 5);
-	}
+	};
 
 	Life.prototype.pause = function () {
 		clearInterval(this.loopTimerId);
 		this.status = this.STATUS.PAUSED;
 		this.freqMeter.reset();
-	}
+	};
 
 	Life.prototype.randomize = function () {
 		life.pause();
@@ -67,7 +67,7 @@ var Life = (function () {
 		life.core.populateRandom(0.375);
 		life.refresh();
 		this.updateInfoCallback();
-	}
+	};
 
 	Life.prototype.reset = function () {
 		life.pause();
@@ -75,7 +75,7 @@ var Life = (function () {
 		life.core.populateDefault();
 		life.refresh();
 		this.updateInfoCallback();
-	}
+	};
 
 	return Life;
 })();
@@ -99,17 +99,17 @@ function init() {
 		// Labels
 		generation: document.getElementById("life-generation"),
 		population: document.getElementById("life-population"),
-		fps:        document.getElementById("life-fps"),
-	}
+		fps:        document.getElementById("life-fps")
+	};
 
 	var play = function () {
 		life.play(ui.maxperf.checked, ui.offscreen.checked);
-	}
+	};
 
 	var restart = function () {
 		life.pause();
 		play();
-	}
+	};
 
 	ui.play.addEventListener("click", function () {
 		if (life.status == life.STATUS.PAUSED) {
@@ -142,7 +142,7 @@ function init() {
 			ui.maxperf.checked   = true;
 			ui.maxperf.disabled  = true;
 		} else {
-			if (ui.maxperf.lastState != undefined) {
+			if (ui.maxperf.lastState !== undefined) {
 				ui.maxperf.checked = ui.maxperf.lastState;
 				delete ui.maxperf.lastState;
 			}
@@ -156,5 +156,5 @@ function init() {
 		ui.generation.innerHTML = life.core.generation;
 		ui.population.innerHTML = life.core.population;
 		ui.fps.innerHTML        = life.freqMeter.freq.toFixed(1);
-	}
+	};
 }

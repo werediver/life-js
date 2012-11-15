@@ -13,11 +13,11 @@ var FreqMeter = (function () {
 		// The last caclulated average frequency
 		this.freq = 0;
 		this.lastTickDate = null;
-	}
+	};
 
 	FreqMeter.prototype.tick = function () {
 		var date = new Date();
-		if (this.lastTickDate != null)
+		if (this.lastTickDate !== null)
 			this.acc += date - this.lastTickDate;
 		++this.n;
 		this.lastTickDate = date;
@@ -27,7 +27,7 @@ var FreqMeter = (function () {
 			this.n   = 0;
 			this.acc = 0;
 		}
-	}
+	};
 
 	return FreqMeter;
 })();

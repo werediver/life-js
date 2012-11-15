@@ -10,43 +10,44 @@ var DoubleGrid = (function () {
 	}
 
 	DoubleGrid.prototype.reset = function () {
+		var key;
 		for (key in this.buffer1)
 			delete this.buffer1[key];
 		for (key in this.buffer2)
 			delete this.buffer2[key];
-	}
+	};
 
 	DoubleGrid.prototype.swap = function () {
 		var tmp = this.buffer1;
 		this.buffer1 = this.buffer2;
 		this.buffer2 = tmp;
-	}
+	};
 
 	DoubleGrid.prototype.get = function (x, y) {
 		return this.buffer1[y * this.width + x];
-	}
+	};
 
 	DoubleGrid.prototype.set = function (x, y, val) {
 		this.buffer2[y * this.width + x] = val;
-	}
+	};
 
 	// Special cases of coordinate translation
 
 	DoubleGrid.prototype.decx = function (x) {
 		return --x >= 0 ? x : this.width - 1;
-	}
+	};
 
 	DoubleGrid.prototype.incx = function (x) {
 		return ++x < this.width ? x : 0;
-	}
+	};
 
 	DoubleGrid.prototype.decy = function (y) {
 		return --y >= 0 ? y : this.height - 1;
-	}
+	};
 
 	DoubleGrid.prototype.incy = function (y) {
 		return ++y < this.height ? y : 0;
-	}
+	};
 
 	return DoubleGrid;
 })();
@@ -66,16 +67,16 @@ var LifeCore = (function () {
 		this.dgrid.reset();
 		this.generation = 1;
 		this.population = 0;
-	}
+	};
 
 	// Note: step() updates population count automatically.
 	LifeCore.prototype.updatePopulationCount = function () {
 		var count = 0, buffer = this.dgrid.buffer1;
-		for (key in buffer)
+		for (var key in buffer)
 			if (this.isAlive(buffer[key]))
 				++count;
 		this.population = count;
-	}
+	};
 
 	LifeCore.prototype.populateDefault = function () {
 		/*
@@ -104,7 +105,7 @@ var LifeCore = (function () {
 		dgrid.swap();
 
 		this.updatePopulationCount();
-	}
+	};
 
 	LifeCore.prototype.populateRandom = function (fillFactor) {
 		var dgrid = this.dgrid;
@@ -116,15 +117,15 @@ var LifeCore = (function () {
 		}
 		dgrid.swap();
 		this.updatePopulationCount();
-	}
+	};
 
 	LifeCore.prototype.newCell = function () {
 		return 1;
-	}
+	};
 
 	LifeCore.prototype.isAlive = function (cell) {
 		return cell > 0;
-	}
+	};
 
 	LifeCore.prototype.countNeighbours = function (x, y) {
 		var count = 0, dgrid = this.dgrid;
@@ -151,7 +152,7 @@ var LifeCore = (function () {
 			++count;
 
 		return count;
-	}
+	};
 
 	LifeCore.prototype.step = function () {
 		var dgrid = this.dgrid;
@@ -181,7 +182,7 @@ var LifeCore = (function () {
 		this.dgrid.swap();
 		this.population = count;
 		++this.generation;
-	}
+	};
 
 	return LifeCore;
 })();

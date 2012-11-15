@@ -5,7 +5,7 @@ var AssertException = (function () {
 
 	AssertException.prototype.toString = function () {
 		return "AssertException: " + this.message;
-	}
+	};
 
 	return AssertException;
 })();

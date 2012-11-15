@@ -36,7 +36,7 @@ var LifeGraphics = (function () {
 		}
 
 		context.stroke();
-	}
+	};
 
 	LifeGraphics.prototype.drawCells = function (core) {
 		this.context.fillStyle = "#80F080";
@@ -54,13 +54,13 @@ var LifeGraphics = (function () {
 				}
 			}
 		}
-	}
+	};
 
 	LifeGraphics.prototype.draw = function (core) {
 		//this.context.clearRect(0, 0, this.canvas.width, this.canvas.height);
 		this.drawGrid();
 		this.drawCells(core);
-	}
+	};
 
 	return LifeGraphics;
 })();
