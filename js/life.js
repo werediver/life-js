@@ -1,12 +1,12 @@
 var Life = (function () {
-	function Life(canvasId, cellSize) {
+	function Life(canvasId) {
 		var canvas = document.getElementById(canvasId);
 		assert(canvas !== null);
 
-		this.graphics = new LifeGraphics(canvas, cellSize);
+		this.graphics = new LifeGraphics(canvas, 10, "#80F080", "#60A060");
 
-		var nx = Math.floor(canvas.width  / cellSize);
-		var ny = Math.floor(canvas.height / cellSize);
+		var nx = Math.floor(canvas.width  / this.graphics.cellSize);
+		var ny = Math.floor(canvas.height / this.graphics.cellSize);
 		this.core = new LifeCore(nx, ny);
 
 		this.freqMeter = new FreqMeter(10);
