@@ -73,7 +73,7 @@ var LifeCore = (function () {
 	LifeCore.prototype.updatePopulationCount = function () {
 		var count = 0, buffer = this.dgrid.buffer1;
 		for (var key in buffer)
-			if (this.isAlive(buffer[key]))
+			if (this.isCellAlive(buffer[key]))
 				++count;
 		this.population = count;
 	};
@@ -123,8 +123,12 @@ var LifeCore = (function () {
 		return 1;
 	};
 
-	LifeCore.prototype.isAlive = function (cell) {
+	LifeCore.prototype.isCellAlive = function (cell) {
 		return cell > 0;
+	};
+
+	LifeCore.prototype.incCellAge = function (cell) {
+		return ++cell;
 	};
 
 	LifeCore.prototype.countNeighbours = function (x, y) {
@@ -132,23 +136,23 @@ var LifeCore = (function () {
 		var _x = dgrid.decx(x), x_ = dgrid.incx(x);
 		var _y = dgrid.decy(y), y_ = dgrid.incy(y);
 
-		if (this.isAlive(dgrid.get(_x, _y)))
+		if (this.isCellAlive(dgrid.get(_x, _y)))
 			++count;
-		if (this.isAlive(dgrid.get(_x, y)))
+		if (this.isCellAlive(dgrid.get(_x, y)))
 			++count;
-		if (this.isAlive(dgrid.get(_x, y_)))
-			++count;
-
-		if (this.isAlive(dgrid.get(x, _y)))
-			++count;
-		if (this.isAlive(dgrid.get(x, y_)))
+		if (this.isCellAlive(dgrid.get(_x, y_)))
 			++count;
 
-		if (this.isAlive(dgrid.get(x_, _y)))
+		if (this.isCellAlive(dgrid.get(x, _y)))
 			++count;
-		if (this.isAlive(dgrid.get(x_, y)))
+		if (this.isCellAlive(dgrid.get(x, y_)))
 			++count;
-		if (this.isAlive(dgrid.get(x_, y_)))
+
+		if (this.isCellAlive(dgrid.get(x_, _y)))
+			++count;
+		if (this.isCellAlive(dgrid.get(x_, y)))
+			++count;
+		if (this.isCellAlive(dgrid.get(x_, y_)))
 			++count;
 
 		return count;
@@ -163,11 +167,10 @@ var LifeCore = (function () {
 			for (var y = 0; y < h; ++y) {
 				var n = this.countNeighbours(x, y);
 				var cell = dgrid.get(x, y);
-				if (this.isAlive(cell)) {
+				if (this.isCellAlive(cell)) {
 					++count;
 					if (n == 2 || n == 3)
-						// Move "++cell" to a method
-						dgrid.set(x, y, ++cell);
+						dgrid.set(x, y, this.incCellAge(cell));
 					else
 						dgrid.set(x, y, 0);
 				} else {
