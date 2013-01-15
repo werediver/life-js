@@ -21,30 +21,15 @@ function hexColorToComponents(hexColor) {
 	return [r, g, b];
 }
 
-function hexColorAdd(hexColor, delta, bounds) {
-	// hexColor - "#RRGGBB"
-	// delta    - [Rdelta, Gdelta, Bdelta]
-	// bounds   - [[Rmin, Rmax], [Gmin, Gmax], [Bmin, Bmax]].
-	var components = hexColorToComponents(hexColor);
+function interpolateColor(hexColor1, hexColor2, k) {
+	// k - position to interpolate, from 0.0 to 1.0.
+	var components1 = hexColorToComponents(hexColor1);
+	var components2 = hexColorToComponents(hexColor2);
+	var components  = new Array(3);
 	for (var i = 0; i < 3; ++i) {
-		var x = components[i] + delta[i];
-		var xMin = bounds[i][0];
-		var xMax = bounds[i][1];
-
-		if (x > xMax)
-			x = xMax;
-		else if (x < xMin)
-			x = xMin;
-
-		components[i] = x;
+		var x1 = components1[i];
+		var x2 = components2[i];
+		components[i] = Math.round(x1 + (x2 - x1) * k);
 	}
 	return hexColorFromComponents(components);
-}
-
-function colorBounds(dark, light) {
-	var components1 = hexColorToComponents(dark);
-	var components2 = hexColorToComponents(light);
-	return [[components1[0], components2[0]],
-			[components1[1], components2[1]],
-			[components1[2], components2[2]]];
 }

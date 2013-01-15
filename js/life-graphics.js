@@ -10,6 +10,9 @@ var LifeGraphics = (function () {
 		this.newCellColor = newCellColor;
 		this.oldCellColor = oldCellColor;
 
+		// While new cell is of newCellColor, cell older than maxCellAge is of oldCellColor.
+		this.maxCellAge = 10;
+
 		this.xoffset = Math.round((this.canvas.width  % this.cellSize) / 2);
 		this.yoffset = Math.round((this.canvas.height % this.cellSize) / 2);
 	}
@@ -50,7 +53,11 @@ var LifeGraphics = (function () {
 			for (var row = 0; row < dgrid.height; ++row) {
 				var cell = dgrid.get(col, row);
 				if (cell > 0) {
-					this.context.fillStyle = hexColorAdd(fillColor, [-cell * 10, -cell * 10, -cell * 10], bounds);
+					this.context.fillStyle = interpolateColor(
+						this.newCellColor,
+						this.oldCellColor,
+						Math.min(cell / this.maxCellAge, 1)
+					);
 					// Here is hard-coded 1 px border
 					this.context.fillRect(
 							this.xoffset + this.cellSize * col + 1,
