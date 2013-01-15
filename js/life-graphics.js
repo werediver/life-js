@@ -47,7 +47,6 @@ var LifeGraphics = (function () {
 	};
 
 	LifeGraphics.prototype.drawCells = function (core) {
-		var fillColor = this.newCellColor;
 		var dgrid = core.dgrid;
 		for (var col = 0; col < dgrid.width; ++col) {
 			for (var row = 0; row < dgrid.height; ++row) {
@@ -57,7 +56,7 @@ var LifeGraphics = (function () {
 						this.context.fillStyle = interpolateColor(
 							this.newCellColor,
 							this.oldCellColor,
-							Math.min(cell / this.maxCellAge, 1)
+							Math.min((cell - 1) / this.maxCellAge, 1)
 						);
 					} else
 						this.context.fillStyle = this.newCellColor;

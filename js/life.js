@@ -1,6 +1,6 @@
 var Life = (function () {
 	function Life(canvas) {
-		this.graphics = new LifeGraphics(canvas, 10, "#80F080", "#60A060", true);
+		this.graphics = new LifeGraphics(canvas, 10, "#80F080", "#D3FA85", true);
 
 		var nx = Math.floor(canvas.width  / this.graphics.cellSize);
 		var ny = Math.floor(canvas.height / this.graphics.cellSize);
