@@ -1,8 +1,5 @@
 var Life = (function () {
-	function Life(canvasId) {
-		var canvas = document.getElementById(canvasId);
-		assert(canvas !== null);
-
+	function Life(canvas) {
 		this.graphics = new LifeGraphics(canvas, 10, "#80F080", "#60A060", true);
 
 		var nx = Math.floor(canvas.width  / this.graphics.cellSize);
@@ -83,10 +80,9 @@ var Life = (function () {
 var life = null;
 
 function init() {
-	life = new Life("life-canvas", 10);
-	life.refresh();
-
 	var ui = {
+		canvas: document.getElementById("life-canvas"),
+
 		// Buttons
 		play:      document.getElementById("life-play"),
 		randomize: document.getElementById("life-randomize"),
@@ -103,6 +99,11 @@ function init() {
 		fps:        document.getElementById("life-fps")
 	};
 
+	life = new Life(ui.canvas, 10);
+	life.refresh();
+
+	// Shortcuts
+
 	var play = function () {
 		life.play(ui.maxperf.checked, ui.offscreen.checked);
 	};
@@ -111,6 +112,8 @@ function init() {
 		life.pause();
 		play();
 	};
+
+	// UI events handlers
 
 	ui.play.addEventListener("click", function () {
 		if (life.status == life.STATUS.PAUSED) {
