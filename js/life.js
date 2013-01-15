@@ -3,7 +3,7 @@ var Life = (function () {
 		var canvas = document.getElementById(canvasId);
 		assert(canvas !== null);
 
-		this.graphics = new LifeGraphics(canvas, 10, "#80F080", "#60A060");
+		this.graphics = new LifeGraphics(canvas, 10, "#80F080", "#60A060", true);
 
 		var nx = Math.floor(canvas.width  / this.graphics.cellSize);
 		var ny = Math.floor(canvas.height / this.graphics.cellSize);
@@ -29,9 +29,9 @@ var Life = (function () {
 	Life.prototype.step = function () {
 		//console.log("Generation: " + this.core.generation);
 		//console.log("Population: " + this.core.population);
+		this.core.step();
 		if (this.offscreen === false)
 			this.graphics.draw(this.core);
-		this.core.step();
 		this.freqMeter.tick();
 		this.updateInfoCallback();
 	};
@@ -93,8 +93,9 @@ function init() {
 		reset:     document.getElementById("life-reset"),
 
 		// Checkbox
-		maxperf:   document.getElementById("life-maxperf"),
-		offscreen: document.getElementById("life-offscreen"),
+		indicateAge: document.getElementById("life-indicate-age"),
+		maxperf:     document.getElementById("life-maxperf"),
+		offscreen:   document.getElementById("life-offscreen"),
 
 		// Labels
 		generation: document.getElementById("life-generation"),
@@ -129,6 +130,11 @@ function init() {
 	ui.reset.addEventListener("click", function () {
 		life.reset();
 		ui.play.innerHTML = "Play";
+	});
+
+	ui.indicateAge.addEventListener("click", function () {
+		life.graphics.indicateAge = this.checked;
+		life.refresh();
 	});
 
 	ui.maxperf.addEventListener("click", function () {

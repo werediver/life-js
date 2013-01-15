@@ -1,5 +1,5 @@
 var LifeGraphics = (function () {
-	function LifeGraphics(canvas, cellSize, newCellColor, oldCellColor) {
+	function LifeGraphics(canvas, cellSize, newCellColor, oldCellColor, indicateAge) {
 		this.canvas  = canvas;
 		this.context = canvas.getContext("2d");
 
@@ -9,6 +9,8 @@ var LifeGraphics = (function () {
 
 		this.newCellColor = newCellColor;
 		this.oldCellColor = oldCellColor;
+
+		this.indicateAge = indicateAge;
 
 		// While new cell is of newCellColor, cell older than maxCellAge is of oldCellColor.
 		this.maxCellAge = 10;
@@ -45,19 +47,20 @@ var LifeGraphics = (function () {
 	};
 
 	LifeGraphics.prototype.drawCells = function (core) {
-		// TODO: _Optionally_ show cell age through change of the color.
 		var fillColor = this.newCellColor;
-		var bounds = colorBounds(this.oldCellColor, "#FFFFFF");
 		var dgrid = core.dgrid;
 		for (var col = 0; col < dgrid.width; ++col) {
 			for (var row = 0; row < dgrid.height; ++row) {
 				var cell = dgrid.get(col, row);
 				if (cell > 0) {
-					this.context.fillStyle = interpolateColor(
-						this.newCellColor,
-						this.oldCellColor,
-						Math.min(cell / this.maxCellAge, 1)
-					);
+					if (this.indicateAge) {
+						this.context.fillStyle = interpolateColor(
+							this.newCellColor,
+							this.oldCellColor,
+							Math.min(cell / this.maxCellAge, 1)
+						);
+					} else
+						this.context.fillStyle = this.newCellColor;
 					// Here is hard-coded 1 px border
 					this.context.fillRect(
 							this.xoffset + this.cellSize * col + 1,

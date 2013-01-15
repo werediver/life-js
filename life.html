@@ -12,9 +12,21 @@
 	</head>
 	<body onload="init()">
 		<p>Conway's Game of Life</p>
-		<p><span id="life-play">Play</span> <span id="life-randomize">Randomize</span> <span id="life-reset">Reset</span></p>
-		<p><small><input id="life-maxperf" type="checkbox" />Max. performance <input id="life-offscreen" type="checkbox" />Off-screen</small></p>
-		<p><small>Generation: <span id="life-generation">1</span> Population: <span id="life-population">0</span> FPS: <span id="life-fps">0.0</span></small></p>
+		<p>
+			<span id="life-play">Play</span>
+			<span id="life-randomize">Randomize</span>
+			<span id="life-reset">Reset</span>
+		</p>
+		<p><small>
+			<input id="life-indicate-age" type="checkbox" checked="checked" />Indicate cell age
+			<input id="life-maxperf" type="checkbox" />Fast
+			<input id="life-offscreen" type="checkbox" />Off-screen
+		</small></p>
+		<p><small>
+			Generation: <span id="life-generation">1</span>
+			Population: <span id="life-population">0</span>
+			FPS: <span id="life-fps">0.0</span>
+		</small></p>
 		<canvas id="life-canvas" width="640px" height="480px">
 			&lt;canvas&gt; element is not supported.
 		</canvas>
