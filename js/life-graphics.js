@@ -12,7 +12,8 @@ var LifeGraphics = (function () {
 
 		this.indicateAge = indicateAge;
 
-		// While new cell is of newCellColor, cell older than maxCellAge is of oldCellColor.
+		// New cell is of newCellColor, older cell gets closer to oldCellColor.
+		// The transition ends at maxCellAge.
 		this.maxCellAge = 10;
 
 		this.xoffset = Math.round((this.canvas.width  % this.cellSize) / 2);

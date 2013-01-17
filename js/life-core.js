@@ -31,6 +31,10 @@ var DoubleGrid = (function () {
 		this.buffer2[y * this.width + x] = val;
 	};
 
+	DoubleGrid.prototype.setCurrent = function (x, y, val) {
+		this.buffer1[y * this.width + x] = val;
+	};
+
 	// Special cases of coordinate translation
 
 	DoubleGrid.prototype.decx = function (x) {
