@@ -30,7 +30,8 @@ var Life = (function () {
 		this.core.step();
 		if (this.offscreen === false)
 			this.graphics.draw(this.core);
-		this.freqMeter.tick();
+		if (this.status == this.STATUS.PLAYING)
+			this.freqMeter.tick();
 		this.updateInfoCallback();
 	};
 
@@ -156,10 +157,8 @@ function init() {
 	});
 
 	ui.step.addEventListener("click", function () {
-		if (isButtonEnabled(this)) {
-			life.core.step();
-			life.refresh();
-		}
+		if (isButtonEnabled(this))
+			life.step();
 	});
 
 	ui.randomize.addEventListener("click", function () {
