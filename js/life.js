@@ -78,8 +78,19 @@ var Life = (function () {
 	return Life;
 })();
 
-function addCssClass(element, cssClassName) {
+function hasCssClass(element, cssClassName) {
+	var cssClassNameRegExp = new RegExp("\\b" + cssClassName + "\\b");
+	return element.className.search(cssClassNameRegExp) >= 0;
+}
 
+function rmCssClass(element, cssClassName) {
+	var cssClassNameRegExp = new RegExp("\\b" + cssClassName + "\\b", "g");
+	element.className = element.className.replace(cssClassNameRegExp, "").trim();
+}
+
+function addCssClass(element, cssClassName) {
+	if (!hasCssClass(element, cssClassName))
+		element.className = element.className + " " + cssClassName;
 }
 
 var life = null;
@@ -119,23 +130,36 @@ function init() {
 		play();
 	};
 
+	var setButtonEnabled = function (element, enabled) {
+		if (enabled)
+			rmCssClass(element, "life-button-disabled");
+		else
+			addCssClass(element, "life-button-disabled");
+	};
+
+	var isButtonEnabled = function (element) {
+		return !hasCssClass(element, "life-button-disabled");
+	};
+
 	// UI events handlers
 
 	ui.play.addEventListener("click", function () {
 		if (life.status == life.STATUS.PAUSED) {
+			setButtonEnabled(ui.step, false);
 			ui.play.innerHTML = "Pause";
 			play();
 		} else {
+			setButtonEnabled(ui.step, true);
 			ui.play.innerHTML = "Play";
 			life.pause();
 		}
 	});
 
 	ui.step.addEventListener("click", function () {
-		life.core.step();
-		life.refresh();
-		// TODO: Make some utility functions.
-		this.className += " life-button-disabled";
+		if (isButtonEnabled(this)) {
+			life.core.step();
+			life.refresh();
+		}
 	});
 
 	ui.randomize.addEventListener("click", function () {
