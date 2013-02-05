@@ -78,6 +78,10 @@ var Life = (function () {
 	return Life;
 })();
 
+function addCssClass(element, cssClassName) {
+
+}
+
 var life = null;
 
 function init() {
@@ -86,6 +90,7 @@ function init() {
 
 		// Buttons
 		play:      document.getElementById("life-play"),
+		step:      document.getElementById("life-step"),
 		randomize: document.getElementById("life-randomize"),
 		reset:     document.getElementById("life-reset"),
 
@@ -124,6 +129,13 @@ function init() {
 			ui.play.innerHTML = "Play";
 			life.pause();
 		}
+	});
+
+	ui.step.addEventListener("click", function () {
+		life.core.step();
+		life.refresh();
+		// TODO: Make some utility functions.
+		this.className += " life-button-disabled";
 	});
 
 	ui.randomize.addEventListener("click", function () {

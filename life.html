@@ -14,14 +14,24 @@
 	<body onload="init()">
 		<p>Conway's Game of Life</p>
 		<p>
-			<span id="life-play">Play</span>
-			<span id="life-randomize">Randomize</span>
-			<span id="life-reset">Reset</span>
+			<span id="life-play"      class="life-button life-play-button">Play</span>
+			<span id="life-step"      class="life-button">Step</span>
+			<span id="life-randomize" class="life-button">Randomize</span>
+			<span id="life-reset"     class="life-button">Reset</span>
 		</p>
 		<p><small>
-			<input id="life-indicate-age" type="checkbox" checked="checked" />Indicate cell age
-			<input id="life-maxperf" type="checkbox" />Fast
-			<input id="life-offscreen" type="checkbox" />Off-screen
+			<label>
+				<input id="life-indicate-age" type="checkbox" checked="checked" />
+				Indicate cell age
+			</label>
+			<label>
+				<input id="life-maxperf" type="checkbox" />
+				Fast
+			</label>
+			<label>
+				<input id="life-offscreen" type="checkbox" />
+				Off-screen
+			</label>
 		</small></p>
 		<p><small>
 			Generation: <span id="life-generation">1</span>

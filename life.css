@@ -3,19 +3,30 @@ body {
 	text-align: center;
 }
 
-#life-play {
+.life-play-button {
 	display: inline-block;
 	width: 3em;
 }
 
-#life-play, #life-randomize, #life-reset {
+.life-button {
 	cursor: pointer;
 	padding: 0.25em 0.5em;
 	background-color: lightgray;
 }
 
-#life-play:hover, #life-randomize:hover, #life-reset:hover {
+.life-button:hover {
 	background-color: #80F080;
+}
+
+.life-button-disabled {
+	cursor: default;
+	color: gray;
+	background-color: lightgray;
+}
+
+.life-button-disabled:hover {
+	cursor: default;
+	background-color: lightgray;
 }
 
 #life-generation, #life-population, #life-fps {
