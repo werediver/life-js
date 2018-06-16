@@ -1,7 +1,25 @@
-var LifeGraphics = (function () {
-	function LifeGraphics(canvas, cellSize, newCellColor, oldCellColor, indicateAge) {
+class LifeGraphics {
+
+    canvas: HTMLCanvasElement;
+    context: CanvasRenderingContext2D;
+
+    cellSize: number;
+
+    newCellColor: string;
+    oldCellColor: string;
+
+    indicateAge: boolean;
+
+    // New cell is of newCellColor, older cell gets closer to oldCellColor.
+    // The transition ends at maxCellAge.
+    maxCellAge = 10;
+
+    xoffset: number;
+    yoffset: number;
+
+	constructor(canvas: HTMLCanvasElement, cellSize: number, newCellColor: string, oldCellColor: string, indicateAge: boolean) {
 		this.canvas  = canvas;
-		this.context = canvas.getContext("2d");
+		this.context = canvas.getContext("2d")!;
 
 		// Cell size should be at least 3 px: 1 px border and 1 px body.
 		assert(cellSize > 2, "Invalid cell size (" + cellSize + " px).");
@@ -20,11 +38,11 @@ var LifeGraphics = (function () {
 		this.yoffset = Math.round((this.canvas.height % this.cellSize) / 2);
 	}
 
-	LifeGraphics.prototype.drawGrid = function () {
-		var w = this.canvas.width;
-		var h = this.canvas.height;
+	drawGrid() {
+		let w = this.canvas.width;
+		let h = this.canvas.height;
 
-		var context = this.context;
+		let context = this.context;
 
 		context.fillStyle = "#FFFFFF";
 		context.fillRect(0, 0, w, h);
@@ -33,25 +51,25 @@ var LifeGraphics = (function () {
 		context.beginPath();
 
 		// Draw vertical lines
-		for (var x = this.xoffset; x <= w; x += this.cellSize) {
+		for (let x = this.xoffset; x <= w; x += this.cellSize) {
 			context.moveTo(x, 0);
 			context.lineTo(x, h);
 		}
 
 		// Draw horizontal lines
-		for (var y = this.yoffset; y <= h; y += this.cellSize) {
+		for (let y = this.yoffset; y <= h; y += this.cellSize) {
 			context.moveTo(0, y);
 			context.lineTo(w, y);
 		}
 
 		context.stroke();
-	};
+	}
 
-	LifeGraphics.prototype.drawCells = function (core) {
-		var dgrid = core.dgrid;
-		for (var col = 0; col < dgrid.width; ++col) {
-			for (var row = 0; row < dgrid.height; ++row) {
-				var cell = dgrid.get(col, row);
+	drawCells(core: LifeCore) {
+		let dgrid = core.dgrid;
+		for (let col = 0; col < dgrid.width; ++col) {
+			for (let row = 0; row < dgrid.height; ++row) {
+				let cell = dgrid.get(col, row);
 				if (cell > 0) {
 					if (this.indicateAge) {
 						this.context.fillStyle = interpolateColor(
@@ -71,13 +89,11 @@ var LifeGraphics = (function () {
 				}
 			}
 		}
-	};
+	}
 
-	LifeGraphics.prototype.draw = function (core) {
+	draw(core: LifeCore) {
 		//this.context.clearRect(0, 0, this.canvas.width, this.canvas.height);
 		this.drawGrid();
 		this.drawCells(core);
-	};
-
-	return LifeGraphics;
-})();
+	}
+}

@@ -1,0 +1,16 @@
+{
+    "compileOnSave": true,
+    "compilerOptions": {
+        "outDir": "build",
+        "noEmitOnError": true,
+        "allowJs": true,
+        "removeComments": true,
+        "strict": true,
+        "noImplicitReturns": true,
+        "noFallthroughCasesInSwitch": true,
+        "target": "es6"
+    },
+    "include": [
+        "src/**/*"
+    ]
+}

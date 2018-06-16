@@ -1,7 +1,14 @@
 // Double buffered grid based on single-dimensional arrays.
 // Rows are stored consequently.
-var DoubleGrid = (function () {
-	function DoubleGrid(width, height) {
+class DoubleGrid {
+
+    width: number;
+    height: number;
+
+    buffer1: Array<number>;
+    buffer2: Array<number>;
+
+    constructor(width: number, height: number) {
 		this.width  = width;
 		this.height = height;
 
@@ -9,55 +16,58 @@ var DoubleGrid = (function () {
 		this.buffer2 = new Array(width * height);
 	}
 
-	DoubleGrid.prototype.reset = function () {
-		var key;
+	reset() {
+		let key;
 		for (key in this.buffer1)
 			delete this.buffer1[key];
 		for (key in this.buffer2)
 			delete this.buffer2[key];
-	};
+	}
 
-	DoubleGrid.prototype.swap = function () {
-		var tmp = this.buffer1;
+	swap() {
+		const tmp = this.buffer1;
 		this.buffer1 = this.buffer2;
 		this.buffer2 = tmp;
-	};
+	}
 
-	DoubleGrid.prototype.get = function (x, y) {
+	get(x: number, y: number) {
 		return this.buffer1[y * this.width + x];
-	};
+	}
 
-	DoubleGrid.prototype.set = function (x, y, val) {
+	set(x: number, y: number, val: number) {
 		this.buffer2[y * this.width + x] = val;
-	};
+	}
 
-	DoubleGrid.prototype.setCurrent = function (x, y, val) {
+	setCurrent(x: number, y: number, val: number) {
 		this.buffer1[y * this.width + x] = val;
-	};
+	}
 
 	// Special cases of coordinate translation
 
-	DoubleGrid.prototype.decx = function (x) {
+	decx(x: number) {
 		return --x >= 0 ? x : this.width - 1;
-	};
+	}
 
-	DoubleGrid.prototype.incx = function (x) {
+	incx(x: number) {
 		return ++x < this.width ? x : 0;
-	};
+	}
 
-	DoubleGrid.prototype.decy = function (y) {
+	decy(y: number) {
 		return --y >= 0 ? y : this.height - 1;
-	};
+	}
 
-	DoubleGrid.prototype.incy = function (y) {
+	incy(y: number) {
 		return ++y < this.height ? y : 0;
-	};
+	}
+}
 
-	return DoubleGrid;
-})();
+class LifeCore {
 
-var LifeCore = (function () {
-	function LifeCore(width, height) {
+    dgrid: DoubleGrid;
+    generation: number = 1;
+    population: number = 0;
+
+	constructor(width: number, height: number) {
 		console.log("Life on grid " + width + "x" + height + ".");
 
 		this.dgrid = new DoubleGrid(width, height);
@@ -67,22 +77,22 @@ var LifeCore = (function () {
 		this.populateDefault();
 	}
 
-	LifeCore.prototype.reset = function () {
+	reset() {
 		this.dgrid.reset();
 		this.generation = 1;
 		this.population = 0;
-	};
+	}
 
 	// Note: step() updates population count automatically.
-	LifeCore.prototype.updatePopulationCount = function () {
-		var count = 0, buffer = this.dgrid.buffer1;
-		for (var key in buffer)
+	updatePopulationCount() {
+		let count = 0, buffer = this.dgrid.buffer1;
+		for (let key in buffer)
 			if (this.isCellAlive(buffer[key]))
 				++count;
 		this.population = count;
-	};
+	}
 
-	LifeCore.prototype.populateDefault = function () {
+	populateDefault() {
 		/*
 		 * Put this figure in the center of the grid:
 		 *     o o o
@@ -90,9 +100,9 @@ var LifeCore = (function () {
 		 *     o   o
 		 */
 
-		var dgrid = this.dgrid;
-		var xmid = Math.round(dgrid.width  / 2);
-		var ymid = Math.round(dgrid.height / 2);
+		let dgrid = this.dgrid;
+		let xmid = Math.round(dgrid.width  / 2);
+		let ymid = Math.round(dgrid.height / 2);
 
 		// Assuming the grid is big enough
 
@@ -109,36 +119,37 @@ var LifeCore = (function () {
 		dgrid.swap();
 
 		this.updatePopulationCount();
-	};
+	}
 
-	LifeCore.prototype.populateRandom = function (fillFactor) {
-		var dgrid = this.dgrid;
-		var w = dgrid.width, h = dgrid.height;
-		for (var n = w * h * fillFactor; n > 0; --n) {
-			var x = Math.round((w - 1) * Math.random());
-			var y = Math.round((h - 1) * Math.random());
+	populateRandom(fillFactor: number) {
+		let dgrid = this.dgrid;
+		let w = dgrid.width, h = dgrid.height;
+		for (let n = w * h * fillFactor; n > 0; --n) {
+			let x = Math.round((w - 1) * Math.random());
+			let y = Math.round((h - 1) * Math.random());
 			dgrid.set(x, y, this.newCell());
 		}
 		dgrid.swap();
 		this.updatePopulationCount();
-	};
+	}
 
-	LifeCore.prototype.newCell = function () {
+	newCell() {
 		return 1;
-	};
+	}
 
-	LifeCore.prototype.isCellAlive = function (cell) {
+	isCellAlive(cell: number) {
 		return cell > 0;
-	};
+	}
 
-	LifeCore.prototype.incCellAge = function (cell) {
-		return ++cell;
-	};
+	incCellAge(cell: number) {
+        cell += 1;
+		return cell;
+	}
 
-	LifeCore.prototype.countNeighbours = function (x, y) {
-		var count = 0, dgrid = this.dgrid;
-		var _x = dgrid.decx(x), x_ = dgrid.incx(x);
-		var _y = dgrid.decy(y), y_ = dgrid.incy(y);
+	countNeighbours(x: number, y: number) {
+		let count = 0, dgrid = this.dgrid;
+		let _x = dgrid.decx(x), x_ = dgrid.incx(x);
+		let _y = dgrid.decy(y), y_ = dgrid.incy(y);
 
 		if (this.isCellAlive(dgrid.get(_x, _y)))
 			++count;
@@ -160,17 +171,17 @@ var LifeCore = (function () {
 			++count;
 
 		return count;
-	};
+	}
 
-	LifeCore.prototype.step = function () {
-		var dgrid = this.dgrid;
-		var w = dgrid.width;
-		var h = dgrid.height;
-		var count = 0;	// new population count
-		for (var x = 0; x < w; ++x) {
-			for (var y = 0; y < h; ++y) {
-				var n = this.countNeighbours(x, y);
-				var cell = dgrid.get(x, y);
+	step() {
+		let dgrid = this.dgrid;
+		let w = dgrid.width;
+		let h = dgrid.height;
+		let count = 0;	// new population count
+		for (let x = 0; x < w; ++x) {
+			for (let y = 0; y < h; ++y) {
+				let n = this.countNeighbours(x, y);
+				let cell = dgrid.get(x, y);
 				if (this.isCellAlive(cell)) {
 					++count;
 					if (n == 2 || n == 3)
@@ -188,8 +199,6 @@ var LifeCore = (function () {
 		}
 		this.dgrid.swap();
 		this.population = count;
-		++this.generation;
-	};
-
-	return LifeCore;
-})();
+		this.generation += 1;
+	}
+}
