@@ -1,14 +1,17 @@
 {
     "compileOnSave": true,
     "compilerOptions": {
-        "outDir": "build",
+        "outFile": "build/Life.js",
+        "sourceMap": true,
+        "importHelpers": true,
+        "forceConsistentCasingInFileNames": true,
         "noEmitOnError": true,
-        "allowJs": true,
         "removeComments": true,
         "strict": true,
         "noImplicitReturns": true,
         "noFallthroughCasesInSwitch": true,
-        "target": "es6"
+        "module": "System",
+        "target": "ESNext"
     },
     "include": [
         "src/**/*"

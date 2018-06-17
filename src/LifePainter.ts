@@ -1,4 +1,6 @@
-class LifePainter {
+import LifeGraphics from "LifeGraphics";
+
+export default class LifePainter {
 
     canvas: HTMLCanvasElement;
     graphics: LifeGraphics;

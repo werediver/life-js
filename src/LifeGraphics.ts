@@ -1,4 +1,6 @@
-class LifeGraphics {
+import assert from "./Assert";
+
+export default class LifeGraphics {
 
     canvas: HTMLCanvasElement;
     context: CanvasRenderingContext2D;

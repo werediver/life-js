@@ -1,3 +1,6 @@
+import LifeGraphics from "LifeGraphics";
+import LifePainter from "LifePainter";
+
 enum Status {
     Playing,
     Paused
