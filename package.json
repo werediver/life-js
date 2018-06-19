@@ -1,0 +1,26 @@
+{
+  "name": "life",
+  "version": "0.1.0",
+  "description": "Conway's Game of Life implemented as a single page web-application",
+  "license": "MIT",
+  "private": true,
+  "main": "index.js",
+  "scripts": {
+    "test": "echo \"Error: no test specified\" && exit 1"
+  },
+  "repository": {
+    "type": "git",
+    "url": "git+https://github.com/werediver/life-js.git"
+  },
+  "author": {
+      "name": "Raman Fedaseyeu",
+      "email": "werediver@gmail.com"
+  },
+  "bugs": {
+    "url": "https://github.com/werediver/life-js/issues"
+  },
+  "homepage": "https://github.com/werediver/life-js#readme",
+  "dependencies": {
+    "systemjs": "^0.21.4"
+  }
+}

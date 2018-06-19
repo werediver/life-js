@@ -3,9 +3,8 @@
 	<head>
 		<meta charset="UTF-8" />
 		<link rel="stylesheet" href="life.css" />
-		<script src="js/Life.js" async="async" defer="defer"></script>
 	</head>
-	<body onload="init()">
+	<body>
 		<p>Conway's Game of Life</p>
 		<p>
 			<span id="life-play"      class="life-button life-play-button">Play</span>
@@ -35,5 +34,16 @@
 		<canvas id="life-canvas" width="640px" height="480px">
 			&lt;canvas&gt; element is not supported.
 		</canvas>
+
+        <script src="node_modules/systemjs/dist/system.js"></script>
+        <script>
+            System.config({
+                baseURL: "/dist",
+                bundles: {
+                    "Life.js": ["Life"]
+                }
+            });
+            System.import("Life");
+        </script>
 	</body>
 </html>

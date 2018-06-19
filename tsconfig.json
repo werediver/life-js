@@ -1,7 +1,7 @@
 {
     "compileOnSave": true,
     "compilerOptions": {
-        "outFile": "build/Life.js",
+        "outFile": "dist/Life.js",
         "sourceMap": true,
         "importHelpers": true,
         "forceConsistentCasingInFileNames": true,

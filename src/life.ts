@@ -217,3 +217,5 @@ function init() {
 		ui.fps.innerHTML        = life.freqMeter.freq.toFixed(1);
 	}
 }
+
+init();
