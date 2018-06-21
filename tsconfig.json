@@ -1,7 +1,7 @@
 {
     "compileOnSave": true,
     "compilerOptions": {
-        "outFile": "dist/Life.js",
+        "outDir": "dist",
         "sourceMap": true,
         "importHelpers": true,
         "forceConsistentCasingInFileNames": true,
@@ -10,8 +10,8 @@
         "strict": true,
         "noImplicitReturns": true,
         "noFallthroughCasesInSwitch": true,
-        "module": "System",
-        "target": "ESNext"
+        "module": "ES6",
+        "target": "ES6"
     },
     "include": [
         "src/**/*"

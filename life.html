@@ -35,15 +35,6 @@
 			&lt;canvas&gt; element is not supported.
 		</canvas>
 
-        <script src="node_modules/systemjs/dist/system.js"></script>
-        <script>
-            System.config({
-                baseURL: "/dist",
-                bundles: {
-                    "Life.js": ["Life"]
-                }
-            });
-            System.import("Life");
-        </script>
+        <script src="dist/life-bundle.js"></script>
 	</body>
 </html>
