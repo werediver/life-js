@@ -1,4 +1,5 @@
-import LifeGraphics from "LifeGraphics";
+import LifeCore from "./LifeCore";
+import LifeGraphics from "./LifeGraphics";
 
 export default class LifePainter {
 
@@ -30,7 +31,7 @@ export default class LifePainter {
 		this.mousemove(e);
 	}
 
-	mouseup(e: MouseEvent) {
+	mouseup(_: MouseEvent) {
 		this.active = false;
 		this.lastCol = -1;
 		this.lastRow = -1;

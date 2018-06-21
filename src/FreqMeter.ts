@@ -1,4 +1,4 @@
-class FreqMeter {
+export default class FreqMeter {
 
     /** Number of samples to average */
     n_avg: number;

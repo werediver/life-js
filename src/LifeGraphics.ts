@@ -1,3 +1,5 @@
+import LifeCore from "./LifeCore";
+import interpolateColor from "./ColorUtils";
 import assert from "./Assert";
 
 export default class LifeGraphics {

@@ -1,5 +1,7 @@
-import LifeGraphics from "LifeGraphics";
-import LifePainter from "LifePainter";
+import LifeCore from "./LifeCore";
+import LifeGraphics from "./LifeGraphics";
+import LifePainter from "./LifePainter";
+import FreqMeter from "./FreqMeter";
 
 enum Status {
     Playing,

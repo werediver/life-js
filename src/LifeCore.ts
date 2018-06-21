@@ -1,67 +1,4 @@
-// Double buffered grid based on single-dimensional arrays.
-// Rows are stored consequently.
-class DoubleGrid {
-
-    width: number;
-    height: number;
-
-    buffer1: Array<number>;
-    buffer2: Array<number>;
-
-    constructor(width: number, height: number) {
-		this.width  = width;
-		this.height = height;
-
-		this.buffer1 = new Array(width * height);
-		this.buffer2 = new Array(width * height);
-	}
-
-	reset() {
-		let key;
-		for (key in this.buffer1)
-			delete this.buffer1[key];
-		for (key in this.buffer2)
-			delete this.buffer2[key];
-	}
-
-	swap() {
-		const tmp = this.buffer1;
-		this.buffer1 = this.buffer2;
-		this.buffer2 = tmp;
-	}
-
-	get(x: number, y: number) {
-		return this.buffer1[y * this.width + x];
-	}
-
-	set(x: number, y: number, val: number) {
-		this.buffer2[y * this.width + x] = val;
-	}
-
-	setCurrent(x: number, y: number, val: number) {
-		this.buffer1[y * this.width + x] = val;
-	}
-
-	// Special cases of coordinate translation
-
-	decx(x: number) {
-		return --x >= 0 ? x : this.width - 1;
-	}
-
-	incx(x: number) {
-		return ++x < this.width ? x : 0;
-	}
-
-	decy(y: number) {
-		return --y >= 0 ? y : this.height - 1;
-	}
-
-	incy(y: number) {
-		return ++y < this.height ? y : 0;
-	}
-}
-
-class LifeCore {
+export default class LifeCore {
 
     dgrid: DoubleGrid;
     generation: number = 1;
@@ -200,5 +137,68 @@ class LifeCore {
 		this.dgrid.swap();
 		this.population = count;
 		this.generation += 1;
+	}
+}
+
+// Double buffered grid based on single-dimensional arrays.
+// Rows are stored consequently.
+class DoubleGrid {
+
+    width: number;
+    height: number;
+
+    buffer1: Array<number>;
+    buffer2: Array<number>;
+
+    constructor(width: number, height: number) {
+		this.width  = width;
+		this.height = height;
+
+		this.buffer1 = new Array(width * height);
+		this.buffer2 = new Array(width * height);
+	}
+
+	reset() {
+		let key;
+		for (key in this.buffer1)
+			delete this.buffer1[key];
+		for (key in this.buffer2)
+			delete this.buffer2[key];
+	}
+
+	swap() {
+		const tmp = this.buffer1;
+		this.buffer1 = this.buffer2;
+		this.buffer2 = tmp;
+	}
+
+	get(x: number, y: number) {
+		return this.buffer1[y * this.width + x];
+	}
+
+	set(x: number, y: number, val: number) {
+		this.buffer2[y * this.width + x] = val;
+	}
+
+	setCurrent(x: number, y: number, val: number) {
+		this.buffer1[y * this.width + x] = val;
+	}
+
+	// Special cases of coordinate translation
+
+	decx(x: number) {
+		return --x >= 0 ? x : this.width - 1;
+	}
+
+	incx(x: number) {
+		return ++x < this.width ? x : 0;
+	}
+
+	decy(y: number) {
+		return --y >= 0 ? y : this.height - 1;
+	}
+
+	incy(y: number) {
+		return ++y < this.height ? y : 0;
 	}
 }
