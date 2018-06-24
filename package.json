@@ -4,9 +4,9 @@
   "description": "Conway's Game of Life implemented as a single page web-application",
   "license": "MIT",
   "private": true,
-  "main": "dist/index.js",
+  "main": "dist/bundle.js",
   "sideEffects": [
-    "./src/Life.ts"
+    "./src/index.ts"
   ],
   "scripts": {
     "test": "echo \"Error: no test specified\" && exit 1",
