@@ -2,4 +2,4 @@
 .cache/
 node_modules/
 build/
-dist/
+dist/index.js

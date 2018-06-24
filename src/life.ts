@@ -105,8 +105,6 @@ function addCssClass(element: HTMLElement, cssClassName: string) {
 		element.className = element.className + " " + cssClassName;
 }
 
-let _life: Life | null = null;
-
 interface LastState<T> {
     lastState: T;
 }
@@ -133,7 +131,6 @@ function init() {
 	}
 
 	const life = new Life(ui.canvas);
-    _life = life;
 	life.refresh();
 
 	// Shortcuts

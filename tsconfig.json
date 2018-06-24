@@ -1,16 +1,15 @@
 {
-    "compileOnSave": true,
     "compilerOptions": {
         "outDir": "dist",
         "sourceMap": true,
-        "importHelpers": true,
         "forceConsistentCasingInFileNames": true,
-        "noEmitOnError": true,
         "removeComments": true,
         "strict": true,
-        "noImplicitReturns": true,
         "noFallthroughCasesInSwitch": true,
-        "module": "ES6",
+        "noImplicitReturns": true,
+        "noUnusedLocals": true,
+        "noUnusedParameters": true,
+        "noEmitOnError": true,
         "target": "ES6"
     },
     "include": [
